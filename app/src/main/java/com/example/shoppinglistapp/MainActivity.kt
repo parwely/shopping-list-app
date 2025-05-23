@@ -1,4 +1,5 @@
 package com.example.shoppinglistapp
+
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -19,17 +20,22 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.shoppinglistapp.ui.theme.ShoppingListAppTheme
 
+// Haupt-Activity der App, Einstiegspunkt
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+        enableEdgeToEdge() // Aktiviert Edge-to-Edge-Layout für modernes UI
         setContent {
+            // Setzt das Theme für die App
             ShoppingListAppTheme {
+                // Oberflächen-Container mit Hintergrundfarbe
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+                    // Scaffold sorgt für Grundlayout (z.B. Padding für Systemleisten)
                     Scaffold { innerPadding ->
+                        // Startet die Haupt-Composable der App
                         ShoppingListApp(modifier = Modifier.padding(innerPadding))
                     }
                 }
@@ -43,27 +49,27 @@ class MainActivity : ComponentActivity() {
  */
 @Composable
 fun ShoppingListApp(modifier: Modifier = Modifier) {
-    // State für die Einkaufsliste
+    // State für die Einkaufsliste (mutable, damit UI sich aktualisiert)
     val shoppingItems = remember { mutableStateListOf<String>() }
-    // State für den Text im Eingabefeld
+    // State für den aktuellen Text im Eingabefeld
     var newItemText by remember { mutableStateOf("") }
 
-    // Definiere sanftere Farben für ein besseres SaaS-Erscheinungsbild
+    // Farben für Karten und Akzente aus dem Theme
     val cardBackground = MaterialTheme.colorScheme.surface
     val accentColor = MaterialTheme.colorScheme.primary
 
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(16.dp) // Außenabstand für die ganze App
     ) {
-        // Titel der App mit modernerer Darstellung
+        // Titelkarte der App
         Card(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 24.dp),
             colors = CardDefaults.cardColors(
-                containerColor = accentColor.copy(alpha = 0.1f)
+                containerColor = accentColor.copy(alpha = 0.1f) // Leichter Akzent
             ),
             shape = RoundedCornerShape(12.dp),
             elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
@@ -79,7 +85,7 @@ fun ShoppingListApp(modifier: Modifier = Modifier) {
             )
         }
 
-        // Eingabebereich mit abgerundeten Ecken
+        // Eingabebereich für neue Artikel
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -96,10 +102,10 @@ fun ShoppingListApp(modifier: Modifier = Modifier) {
                     .padding(16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // Verbesserte Texteingabe
+                // Texteingabefeld für neuen Artikel
                 OutlinedTextField(
                     value = newItemText,
-                    onValueChange = { newItemText = it },
+                    onValueChange = { newItemText = it }, // Aktualisiert State bei Eingabe
                     label = { Text("Was brauchst du?") },
                     modifier = Modifier
                         .weight(1f)
@@ -111,12 +117,12 @@ fun ShoppingListApp(modifier: Modifier = Modifier) {
                     )
                 )
 
-                // Verbesserte Button-Darstellung
+                // Button zum Hinzufügen eines neuen Artikels
                 Button(
                     onClick = {
-                        if (newItemText.isNotBlank()) {
-                            shoppingItems.add(newItemText)
-                            newItemText = ""
+                        if (newItemText.isNotBlank()) { // Nur wenn Eingabe nicht leer
+                            shoppingItems.add(newItemText) // Artikel zur Liste hinzufügen
+                            newItemText = "" // Eingabefeld leeren
                         }
                     },
                     shape = RoundedCornerShape(12.dp),
@@ -127,11 +133,11 @@ fun ShoppingListApp(modifier: Modifier = Modifier) {
             }
         }
 
-        // Card für die Liste mit abgerundeten Ecken
+        // Karte für die Liste der Einkaufsartikel
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(1f),
+                .weight(1f), // Nimmt den restlichen Platz ein
             colors = CardDefaults.cardColors(
                 containerColor = cardBackground
             ),
@@ -142,7 +148,7 @@ fun ShoppingListApp(modifier: Modifier = Modifier) {
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
-                // Anzeige für leere Liste - mit if/else anstelle von AnimatedVisibility
+                // Wenn die Liste leer ist, zeige einen Hinweistext
                 if (shoppingItems.isEmpty()) {
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
@@ -161,12 +167,13 @@ fun ShoppingListApp(modifier: Modifier = Modifier) {
                         )
                     }
                 } else {
-                    // Liste der Einkaufsartikel mit verbesserten Listeneinträgen
+                    // Ansonsten zeige die Liste der Artikel
                     LazyColumn(
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(8.dp)
                     ) {
+                        // Für jeden Artikel in der Liste
                         items(shoppingItems) { item ->
                             Card(
                                 modifier = Modifier
@@ -186,6 +193,7 @@ fun ShoppingListApp(modifier: Modifier = Modifier) {
                                         )
                                     },
                                     trailingContent = {
+                                        // Button zum Entfernen des Artikels
                                         IconButton(
                                             onClick = { shoppingItems.remove(item) }
                                         ) {
@@ -207,7 +215,7 @@ fun ShoppingListApp(modifier: Modifier = Modifier) {
 }
 
 /**
- * Vorschau der Einkaufslisten-App
+ * Vorschau der Einkaufslisten-App im Design-Editor
  */
 @Preview(showBackground = true)
 @Composable
