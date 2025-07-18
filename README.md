@@ -10,5 +10,4 @@ Eine einfache Android-App zum Verwalten einer persönlichen Einkaufsliste. Erste
 
 ## APK
 
-Die APK-Datei kann [hier heruntergeladen werden](https://github.com/ginkogruen/shopping-list-app/releases) oder
-über `Build > Generate App Bundles or APKs > Build APKs` in Android Studio erstellt werden.
+Die APK-Datei kann [hier heruntergeladen werden](https://github.com/ginkogruen/shopping-list-app/releases)
